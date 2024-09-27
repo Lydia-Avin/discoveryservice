@@ -1,53 +1,55 @@
-name: Deploy Flask App to EC2
+name: Build and Deploy Docker Image to EC2
 
 on:
   push:
     branches:
-      - main  # Trigger the workflow on push to the main branch
+      - main  # Change this to your default branch
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code from GitHub
-      - name: Checkout the repository
-        uses: actions/checkout@v3
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      # Step 2: Set up Docker Buildx
+      # Step 2: Set up Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Step 3: Build the Docker image for the Flask app
+      # Step 4: Build the Docker image
       - name: Build Docker image
-        run: docker build -t discoveryservice:latest .
+        run: |
+          docker build -t your-image-name:latest .
 
-      # Step 4: Save Docker image to a file
-      - name: Save Docker image to file
-        run: docker save discoveryservice:latest | gzip > docker_image.tar.gz
+      # Step 5: Save the Docker image to a tarball
+      - name: Save Docker image to a tarball
+        run: |
+          docker save your-image-name:latest | gzip > docker_image.tar.gz
 
-      # Step 5: Copy Docker image tarball to EC2 instance
+      # Step 6: Copy the tarball to EC2 using SCP
       - name: Copy Docker image to EC2
         uses: appleboy/scp-action@v0.1.0
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}  # Default to 'ec2-user' if EC2_USER is not set
-          key: ${{secrets.EC2_SSH_KEY }}
+          username: ${{ secrets.EC2_USER }}  # For Amazon Linux, it's usually "ec2-user"
+          key: ${{ secrets.EC2_SSH_KEY }}
           source: ./docker_image.tar.gz
-          target: /home/${{ secrets.EC2_USER}}/docker_image.tar.gz
+          target: /home/${{ secrets.EC2_USER }}/docker_image.tar.gz
 
-      # Step 6: SSH into EC2 instance and run the Flask app in Docker
-      - name: SSH into EC2 and run Docker container
-        uses: appleboy/ssh-action@v0.1.5
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 7: SSH into EC2 and load the Docker image
+      - name: SSH into EC2 and load Docker image
+        uses: appleboy/ssh-action@v0.1.0
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER || 'ec2-user' }}
+          username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Load the Docker image
-            docker load -i docker_image.tar.gz
-            # Stop any existing container
-            docker stop discoveryservice || true
-            docker rm discoveryservice || true
-            # Run the new container
-            docker run -d -p 8080:8080 --name discoverysvccont discoveryservice:latest
+            docker load -i /home/${{ secrets.EC2_USER }}/docker_image.tar.gz
+            docker run -d -p 8080:8080 your-image-name:latest
