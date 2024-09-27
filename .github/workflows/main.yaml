@@ -31,10 +31,10 @@ jobs:
         uses: appleboy/scp-action@v0.1.0
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER || 'ec2-user' }}  # Default to 'ec2-user' if EC2_USER is not set
-          key: ${{ secrets.EC2_SSH_KEY }}
+          username: ${{ secrets.EC2_USER }}  # Default to 'ec2-user' if EC2_USER is not set
+          key: ${{secrets.EC2_SSH_KEY }}
           source: ./docker_image.tar.gz
-          target: /home/{{ secrets.EC2_USER || 'ec2-user' }}/docker_image.tar.gz
+          target: /home/${{ secrets.EC2_USER}}/docker_image.tar.gz
 
       # Step 6: SSH into EC2 instance and run the Flask app in Docker
       - name: SSH into EC2 and run Docker container
