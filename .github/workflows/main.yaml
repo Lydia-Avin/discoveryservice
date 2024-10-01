@@ -106,10 +106,4 @@ jobs:
             IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/discoveryservice:$TAG
             docker pull $IMAGE_NAME
 
-            # Replace image tag in docker-compose.yml or relevant file (assuming you use sed for replacement)
-            sed -i "s|image: discoveryservice.*|image: $IMAGE_NAME|g" ./config/docker-compose.yml
-
-            # Run the docker-compose file from the config folder
-            cd ./config
-            docker-compose down || true
-            docker-compose up -d
+            docker run -d -p 8080:8080 --name flask_app_container $IMAGE_NAME
