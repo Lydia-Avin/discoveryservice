@@ -62,7 +62,7 @@ jobs:
     needs: build-and-push-ecr
 
     steps:
-      # Step 1: SSH into EC2 and deploy containers using Docker Compose
+      # Step 1: SSH into EC2 and deploy containers using Docker Compose 
       - name: SSH into EC2 and deploy containers using Docker Compose
         uses: appleboy/ssh-action@v1.0.3
         with:
