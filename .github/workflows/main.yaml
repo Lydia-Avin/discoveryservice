@@ -34,7 +34,9 @@ jobs:
         run: |
           # Define the dynamic tag (e.g., using the Git commit SHA)
           TAG=$(echo ${{ github.sha }} | head -c8)
-          IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/discoveryservice:$TAG
+          AWS_ACCOUNT_ID="${{ secrets.AWS_ACCOUNT_ID }}"
+          ECR_REGION="${{ secrets.ECR_REGION }}"
+          IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_NAME}.amazonaws.com/discoveryservice:${TAG}"
           
           # Build and tag the Docker image
           docker build -t $IMAGE_NAME .
