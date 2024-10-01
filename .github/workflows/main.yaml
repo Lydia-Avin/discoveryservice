@@ -35,8 +35,13 @@ jobs:
           # Define the dynamic tag (e.g., using the Git commit SHA)
           TAG=$(echo ${{ github.sha }} | head -c8)
           AWS_ACCOUNT_ID="${{ secrets.AWS_ACCOUNT_ID }}"
-          ECR_REGION="${{ secrets.ECR_REGION }}"
+          AWS_REGION_NAME="${{ secrets.AWS_REGION_NAME }}"
           IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_NAME}.amazonaws.com/discoveryservice:${TAG}"
+          
+          # Debugging: Print the IMAGE_NAME to ensure it's correctly formatted
+          echo "AWS_ACCOUNT_ID is $AWS_ACCOUNT_ID"
+          echo "AWS_REGION_NAME is $AWS_REGION_NAME"
+          echo "IMAGE_NAME is $IMAGE_NAME"
           
           # Build and tag the Docker image
           docker build -t $IMAGE_NAME .
@@ -87,7 +92,7 @@ jobs:
             aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws configure set region ${{ secrets.AWS_REGION_NAME }}
 
-            # Docker login to ECR
+            # Docker login to ECR (specify the region for ECR)
             aws ecr get-login-password --region ${{ secrets.AWS_REGION_NAME }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com
 
             # Clean up Docker to free space
