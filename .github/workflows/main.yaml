@@ -101,7 +101,7 @@ jobs:
             docker volume prune -f
             docker network prune -f
 
-            # Pull the Docker image from ECR
+            # Pull the Docker image from ECR 
             TAG=$(echo ${{ github.sha }} | head -c8)
             IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/discoveryservice:$TAG
             docker pull $IMAGE_NAME
