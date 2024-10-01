@@ -86,7 +86,15 @@ jobs:
                 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
                 sudo chmod +x /usr/local/bin/docker-compose
             fi
-            
+
+            # Install AWS CLI if not present
+            if ! command -v aws &> /dev/null
+            then
+                curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                unzip awscliv2.zip
+                sudo ./aws/install
+            fi
+
             # Configure AWS CLI on EC2 instance (optional if instance role already allows access)
             aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -96,14 +104,15 @@ jobs:
             aws ecr get-login-password --region ${{ secrets.AWS_REGION_NAME }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com
 
             # Clean up Docker to free space
-            docker container prune -f
-            docker image prune -a -f
-            docker volume prune -f
-            docker network prune -f
+            sudo docker container prune -f
+            sudo docker image prune -a -f
+            sudo docker volume prune -f
+            sudo docker network prune -f
 
             # Pull the Docker image from ECR 
             TAG=$(echo ${{ github.sha }} | head -c8)
             IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/discoveryservice:$TAG
-            docker pull $IMAGE_NAME
+            sudo docker pull $IMAGE_NAME
 
-            docker run -d -p 8080:8080 --name flask_app_container $IMAGE_NAME
+            # Run the Flask app container
+            sudo docker run -d -p 8080:8080 --name flask_app_container $IMAGE_NAME
