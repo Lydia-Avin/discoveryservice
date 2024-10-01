@@ -76,8 +76,10 @@ jobs:
             # Install Docker if not present
             if ! command -v docker &> /dev/null
             then
-                sudo apt-get update
-                sudo apt-get install -y docker.io
+                sudo yum update -y
+                sudo yum install -y docker
+                sudo systemctl start docker
+                sudo systemctl enable docker
             fi
 
             # Install Docker Compose if not present
@@ -88,12 +90,13 @@ jobs:
             fi
 
             # Configure AWS CLI on EC2 instance (optional if instance role already allows access)
-            aws configure set aws_access_key_id ***
-            aws configure set aws_secret_access_key ***
-            aws configure set region ***
+            # Only uncomment the following lines if you need to configure AWS CLI manually
+            # aws configure set aws_access_key_id <your-access-key-id>
+            # aws configure set aws_secret_access_key <your-secret-access-key>
+            # aws configure set region <your-region>
 
             # Docker login to ECR (specify the region for ECR)
-            aws ecr get-login-password --region *** | sudo docker login --username AWS --password-stdin ***.dkr.ecr.***.amazonaws.com
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION_NAME }} | sudo docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com
 
             # Clean up Docker to free space
             sudo docker container prune -f
@@ -108,4 +111,7 @@ jobs:
 
             # Run the Flask app container
             sudo docker run -d -p 8080:8080 --name flask_app_container $IMAGE_NAME
+
+            echo "Flask app container started successfully on port 8080"
+            exit 0
 
