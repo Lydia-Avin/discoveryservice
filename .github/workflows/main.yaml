@@ -95,7 +95,7 @@ jobs:
             # aws configure set aws_secret_access_key <your-secret-access-key>
             # aws configure set region <your-region>
 
-            # Docker login to ECR (specify the region for ECR)
+            # Docker login to ECR (specify the region for ECR )
             aws ecr get-login-password --region ${{ secrets.AWS_REGION_NAME }} | sudo docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com
 
             # Clean up Docker to free space
