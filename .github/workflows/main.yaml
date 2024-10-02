@@ -89,7 +89,7 @@ jobs:
                 sudo chmod +x /usr/local/bin/docker-compose
             fi
 
-            # Configure AWS CLI on EC2 instance (optional if instance role already allows access)
+            # Configure AWS CLI on EC2 instance (optional if instance role already allows access) 
             # Only uncomment the following lines if you need to configure AWS CLI manually
             # aws configure set aws_access_key_id <your-access-key-id>
             # aws configure set aws_secret_access_key <your-secret-access-key>
