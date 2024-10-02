@@ -109,6 +109,8 @@ jobs:
             IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/docker/dockrepo:$TAG
             sudo docker pull $IMAGE_NAME
 
+            export IMAGE_NAME=$IMAGE_NAME
+
             # Run the docker-compose file from the config folder
             cd ./config
             docker-compose down || true
