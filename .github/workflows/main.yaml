@@ -115,7 +115,7 @@ jobs:
             export IMAGE_NAME=$IMAGE_NAME
 
             # Run the docker-compose file root folder
-            cd ./
+            cd ./discoveryservice
             docker-compose down || true
             IMAGE_NAME=$IMAGE_NAME docker-compose up -d --pull always
 
