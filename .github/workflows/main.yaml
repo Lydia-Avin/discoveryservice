@@ -36,7 +36,7 @@ jobs:
           TAG=$(echo ${{ github.sha }} | head -c8)
           AWS_ACCOUNT_ID="${{ secrets.AWS_ACCOUNT_ID }}"
           AWS_REGION_NAME="${{ secrets.AWS_REGION_NAME }}"
-          IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_NAME}.amazonaws.com/docker/dockrepo:${TAG}"
+          IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_NAME}.amazonaws.com/copilot/discoveryservice:${TAG}"
           
           # Debugging: Print the IMAGE_NAME to ensure it's correctly formatted
           echo "AWS_ACCOUNT_ID is $AWS_ACCOUNT_ID"
