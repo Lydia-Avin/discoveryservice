@@ -114,7 +114,7 @@ jobs:
 
             export IMAGE_NAME=$IMAGE_NAME
 
-            # Run the docker-compose file from the config folder
+            # Run the docker-compose file root folder
             cd ./
             docker-compose down || true
             IMAGE_NAME=$IMAGE_NAME docker-compose up -d --pull always
