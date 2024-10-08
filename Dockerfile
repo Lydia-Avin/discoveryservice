@@ -4,6 +4,11 @@ FROM python:3.12.5-slim
 # Set the working directory in the container
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y \
+    libcrypt1 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+    
 # Install dependencies
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
