@@ -106,7 +106,7 @@ jobs:
 
             # Pull the Docker image from ECR 
             TAG=$(echo ${{ github.sha }} | head -c8)
-            IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/docker/dockrepo:$TAG
+            IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/copilot/discoveryservice:$TAG
             sudo docker pull $IMAGE_NAME
 
             export IMAGE_NAME=$IMAGE_NAME
