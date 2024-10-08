@@ -112,7 +112,7 @@ jobs:
             export IMAGE_NAME=$IMAGE_NAME
 
             # Run the docker-compose file from the config folder
-            cd ./config
+            cd ./
             docker-compose down || true
             IMAGE_NAME=$IMAGE_NAME docker-compose up -d --pull always
 
