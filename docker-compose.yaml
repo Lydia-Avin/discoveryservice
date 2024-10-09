@@ -15,14 +15,13 @@
 #     volumes:
 #       - ../discoveryservice:/app/
 
-version: '3'
+version: '3.8'
 services:
-  discovery_service_container:
-    container_name: discoveryservice
-    image: ${IMAGE_NAME}
+  discoveryservice:
+    image: ${IMAGE_NAME}  # Use the IMAGE_NAME variable defined in your workflow
     ports:
-      - '8000:8000'
-    volumes:
-      - ../discoveryservice:/app
+      - "8000:8000" 
+    # volumes:
+    #   - ../discoveryservice:/app
     #working_dir: /app
     # command: python main.py
