@@ -119,7 +119,7 @@ jobs:
             cd ./discoveryservice
     
             # Ensure any previous containers are down
-            docker-compose down || true
+            sudo docker-compose down --rmi all || true
     
             # Run the new container using docker-compose and set the container name explicitly
             IMAGE_NAME=$IMAGE_NAME docker-compose -p discoveryservice up -d --force-recreate
