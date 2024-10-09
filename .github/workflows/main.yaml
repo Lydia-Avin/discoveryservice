@@ -111,7 +111,8 @@ jobs:
             IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/copilot/discoveryservice:$TAG
     
             echo "Using IMAGE_NAME: $IMAGE_NAME"
-    
+            echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+            
             sudo docker pull $IMAGE_NAME
     
             # Navigate to the correct folder for docker-compose
@@ -122,6 +123,7 @@ jobs:
     
             # Run the new container using docker-compose and set the container name explicitly
             export IMAGE_NAME=$IMAGE_NAME
+
             sudo docker-compose up -d --force-recreate
     
             echo "Flask app container started successfully on port 8000"
