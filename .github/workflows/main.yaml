@@ -70,7 +70,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # Stop and remove any running containers
-            CONTAINER_NAME="vibrant_davinci"  
+            CONTAINER_NAME="discoveryservice"  
     
             # Stop and remove the running container if it exists
             if [ $(sudo docker ps -q -f name=$CONTAINER_NAME) ]; then
