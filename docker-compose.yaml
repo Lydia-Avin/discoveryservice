@@ -15,6 +15,7 @@
 #     volumes:
 #       - ../discoveryservice:/app/
 
+version: '3'
 services:
   discovery_service_container:
     container_name: discoveryservice
