@@ -18,7 +18,7 @@
 version: '3.8'
 services:
   discoveryservice:
-    image: ${IMAGE_NAME}  # Use the IMAGE_NAME variable defined in your workflow
+    image: "${IMAGE_NAME}"  # Use the IMAGE_NAME variable defined in your workflow
     ports:
       - "8000:8000" 
     volumes:
