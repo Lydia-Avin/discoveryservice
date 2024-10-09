@@ -113,7 +113,7 @@ jobs:
             echo "Using IMAGE_NAME: $IMAGE_NAME"
     
             sudo docker pull $IMAGE_NAME
-            export IMAGE_NAME=$IMAGE_NAME
+            #export IMAGE_NAME=$IMAGE_NAME
     
             # Navigate to the correct folder for docker-compose
             cd ./discoveryservice
@@ -122,7 +122,7 @@ jobs:
             sudo docker-compose down || true
     
             # Run the new container using docker-compose and set the container name explicitly
-            sudo -E IMAGE_NAME=$IMAGE_NAME docker-compose -p discoveryservice up -d --force-recreate
+            sudo IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/copilot/discoveryservice:$TAG docker-compose -p discoveryservice up -d --force-recreate
     
             echo "Flask app container started successfully on port 8000"
             exit 0
