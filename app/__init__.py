@@ -5,6 +5,6 @@ def create_app():
 
     @app.route("/")
     def root():
-        return jsonify(message="Welcome to Pepsales!! 1 ")
+        return jsonify(message="Welcome to Pepsales!! 2 ")
 
     return app
