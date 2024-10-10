@@ -111,7 +111,7 @@ jobs:
             export IMAGE_NAME=$IMAGE_NAME
 
             # Run the docker-compose file in the root folder
-            cd ~/discoveryservice-cicd-poc
+            cd ~/discoveryservice
             pwd
             docker-compose down || true
             IMAGE_NAME=$IMAGE_NAME docker-compose up -d 
