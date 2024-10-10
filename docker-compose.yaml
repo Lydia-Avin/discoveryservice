@@ -9,7 +9,7 @@ version: '3'
 services:
   discovery_service_container:
     container_name: discoveryservice
-    image: ${IMAGE_NAME}
+    image: "${IMAGE_NAME}"
     ports:
       - '8000:8000'
     volumes:
