@@ -106,6 +106,8 @@ jobs:
 
             sudo docker pull $IMAGE_NAME
 
+            echo "Using: IMAGE_NAME: $IMAGE_NAME"
+
             export IMAGE_NAME=$IMAGE_NAME
 
             # Run the docker-compose file in the root folder
