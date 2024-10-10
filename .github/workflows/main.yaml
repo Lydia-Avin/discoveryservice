@@ -12,7 +12,7 @@ jobs:
     name: Build and Push Docker Images to ECR
 
     steps:
-      # Step 1: Check out the code
+      # Step 1: Check out the latest code
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -43,7 +43,7 @@ jobs:
           echo "AWS_REGION_NAME is $AWS_REGION_NAME"
           echo "IMAGE_NAME is $IMAGE_NAME"
           
-          # Build and tag the Docker image
+          # Build and tag the Docker image with no cache to ensure the latest code is built
           docker build --no-cache -t $IMAGE_NAME .
 
           # Output the tag for later use
@@ -89,13 +89,7 @@ jobs:
                 sudo chmod +x /usr/local/bin/docker-compose
             fi
 
-            # Configure AWS CLI on EC2 instance (optional if instance role already allows access) 
-            # Only uncomment the following lines if you need to configure AWS CLI manually
-            # aws configure set aws_access_key_id <your-access-key-id>
-            # aws configure set aws_secret_access_key <your-secret-access-key>
-            # aws configure set region <your-region>
-
-            # Docker login to ECR (specify the region for ECR )
+            # Docker login to ECR (specify the region for ECR)
             aws ecr get-login-password --region ${{ secrets.AWS_REGION_NAME }} | sudo docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com
 
             # Clean up Docker to free space
@@ -104,7 +98,7 @@ jobs:
             sudo docker volume prune -f
             sudo docker network prune -f
 
-            # Pull the Docker image from ECR 
+            # Pull the latest Docker image from ECR
             TAG=$(echo ${{ github.sha }} | head -c8)
             IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/copilot/discoveryservice:$TAG
             
@@ -114,9 +108,10 @@ jobs:
 
             export IMAGE_NAME=$IMAGE_NAME
 
-            # Run the docker-compose file root folder
+            # Run the docker-compose file in the root folder
             cd ./discoveryservice
             docker-compose down || true
+            IMAGE_NAME=$IMAGE_NAME docker-compose pull  # Ensure the latest image is pulled
             IMAGE_NAME=$IMAGE_NAME docker-compose up -d --force-recreate --build
 
             echo "Flask app container started successfully on port 8000"
