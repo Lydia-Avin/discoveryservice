@@ -112,8 +112,7 @@ jobs:
             cd ./discoveryservice
             docker-compose down || true
             IMAGE_NAME=$IMAGE_NAME docker-compose pull  # Ensure the latest image is pulled
-            # IMAGE_NAME=$IMAGE_NAME docker-compose up -d --force-recreate --build
-            docker run -d -p 8000:8000 $IMAGE_NAME
+            IMAGE_NAME=$IMAGE_NAME docker-compose up -d --force-recreate --build
 
             echo "Flask app container started successfully on port 8000"
             exit 0
