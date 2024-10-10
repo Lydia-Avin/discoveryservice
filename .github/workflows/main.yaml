@@ -114,7 +114,7 @@ jobs:
             cd ~/discoveryservice
             pwd
             docker-compose down || true
-            IMAGE_NAME=$IMAGE_NAME docker-compose up -d 
+            IMAGE_NAME=$IMAGE_NAME docker-compose up -d --pull always
 
             echo "Flask app container started successfully on port 8000"
             exit 0
