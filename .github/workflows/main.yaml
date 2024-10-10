@@ -104,14 +104,15 @@ jobs:
             
             echo "Using IMAGE_NAME: $IMAGE_NAME"
 
-            sudo docker pull $IMAGE_NAME
+            sudo docker images
 
-            echo "Using: IMAGE_NAME: $IMAGE_NAME"
+            sudo docker pull $IMAGE_NAME
 
             export IMAGE_NAME=$IMAGE_NAME
 
             # Run the docker-compose file in the root folder
             cd ./discoveryservice
+            pwd
             docker-compose down || true
             IMAGE_NAME=$IMAGE_NAME docker-compose up -d 
 
