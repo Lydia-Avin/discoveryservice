@@ -104,7 +104,7 @@ jobs:
             
             echo "Using IMAGE_NAME: $IMAGE_NAME"
 
-            sudo docker pull $IMAGE_NAME
+            # sudo docker pull $IMAGE_NAME
 
             export IMAGE_NAME=$IMAGE_NAME
 
