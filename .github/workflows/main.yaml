@@ -111,7 +111,7 @@ jobs:
             # Run the docker-compose file in the root folder
             cd ./discoveryservice
             docker-compose down || true
-            IMAGE_NAME=$IMAGE_NAME docker-compose up -d --force-recreate 
+            IMAGE_NAME=$IMAGE_NAME docker-compose up -d 
 
             echo "Flask app container started successfully on port 8000"
             exit 0
