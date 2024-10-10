@@ -1,4 +1,4 @@
-# version: '3'
+version: '3'
 # services:
 #   flask_app:
 #     image: ${IMAGE_NAME}
@@ -6,22 +6,22 @@
 #       - "8000:8000"
 
 
-# services:
-#   discovery_service_container:
-#     container_name: discoveryservice
-#     image: ${IMAGE_NAME}
-#     ports:
-#       - '8000:8000'
-#     volumes:
-#       - ../discoveryservice:/app/
-
-version: '3.8'
 services:
-  discoveryservice:
-    image: "${IMAGE_NAME}"  # Use the IMAGE_NAME variable defined in your workflow
+  discovery_service_container:
+    container_name: discoveryservice
+    image: ${IMAGE_NAME}
     ports:
-      - "8000:8000" 
+      - '8000:8000'
     volumes:
-      - ../discoveryservice:/app
+      - ../discoveryservice:/app/
+
+# version: '3.8'
+# services:
+#   discoveryservice:
+#     image: "${IMAGE_NAME}"  
+#     ports:
+#       - "8000:8000" 
+#     volumes:
+#       - ../discoveryservice:/app
     #working_dir: /app
     # command: python main.py
