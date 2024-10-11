@@ -12,8 +12,8 @@ services:
     image: ${IMAGE_NAME}
     ports:
       - "8000:8000"
-    volumes:
-      - ../discoveryservice:/app/
+    # volumes:
+    #   - ../discoveryservice:/app/
 
 # version: '3.8'
 # services:
