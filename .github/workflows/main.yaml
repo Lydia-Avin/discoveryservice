@@ -110,6 +110,9 @@ jobs:
             
             echo "Using IMAGE_NAME: $IMAGE_NAME"
 
+            docker stop discoveryservice || true
+            docker rm discoveryservice || true
+
             sudo docker pull $IMAGE_NAME
 
             export IMAGE_NAME=$IMAGE_NAME
