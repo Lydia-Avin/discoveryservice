@@ -47,7 +47,9 @@ jobs:
           docker build -t $IMAGE_NAME .
 
           # Output the tag for later use
-          echo "::set-output name=image::$IMAGE_NAME"
+          # echo "::set-output name=image::$IMAGE_NAME" 
+      - name: Set output
+        run: echo "{name}={value}" >> $GITHUB_OUTPUT
         id: docker_build
 
       # Step 5: Push Docker image to ECR
