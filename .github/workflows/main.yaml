@@ -44,7 +44,7 @@ jobs:
           echo "IMAGE_NAME is $IMAGE_NAME"
           
           # Build and tag the Docker image
-          docker build -t $IMAGE_NAME .
+          docker build --env-file .env -t $IMAGE_NAME .
 
           # Output the tag for later use
           echo "::set-output name=image::$IMAGE_NAME" 
