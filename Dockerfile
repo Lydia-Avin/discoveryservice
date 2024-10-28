@@ -3,6 +3,9 @@
 FROM python:3.9-slim
 ARG EC2_USER
 ENV EC2_USER=$EC2_USER
+ARG AWS_ACCESS_KEY_ID
+ENV AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+
 
 # Set the working directory in the container
 WORKDIR /app
