@@ -36,7 +36,7 @@ jobs:
           TAG=$(echo ${{ github.sha }} | head -c8)
           AWS_ACCOUNT_ID="${{ secrets.AWS_ACCOUNT_ID }}"
           AWS_REGION_NAME="${{ secrets.AWS_REGION_NAME }}"
-          IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_NAME}.amazonaws.com/copilot/discoveryservice:${TAG}"
+          IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_NAME}.amazonaws.com/${{ secrets.ECR_REPOSITORY_NAME }}:${TAG}"
           
           # Debugging: Print the IMAGE_NAME to ensure it's correctly formatted
           echo "AWS_ACCOUNT_ID is $AWS_ACCOUNT_ID"
@@ -106,7 +106,7 @@ jobs:
 
             # Pull the Docker image from ECR 
             TAG=$(echo ${{ github.sha }} | head -c8)
-            IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/copilot/discoveryservice:$TAG
+            IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/${{ secrets.ECR_REPOSITORY_NAME }}:$TAG
             
             echo "Using IMAGE_NAME: $IMAGE_NAME"
 
