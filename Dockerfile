@@ -1,7 +1,8 @@
 # Use the official Python image from the Docker Hub
 # FROM python:3.12.5-slim
 FROM python:3.9-slim
-ENV AWS_ACCESS_KEY_ID=your_key_here
+ARG EC2_USER
+ENV EC2_USER=$EC2_USER
 
 # Set the working directory in the container
 WORKDIR /app
