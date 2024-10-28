@@ -10,6 +10,6 @@ def create_app():
     
     @app.route("/env")
     def env():
-        return jsonify(message=os.environ.get("AWS_ACCESS_KEY_ID"))
+        return jsonify(message=os.environ.get("EC2_USER"))
 
     return app
