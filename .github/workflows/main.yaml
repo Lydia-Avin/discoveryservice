@@ -27,6 +27,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Set environment variables
+        run: |
+          touch .env
+          echo "TEST_SECRET=${{ secrets.TEST_SECRET }}" >> .env
+
       - name: Build Docker image
         run: |
           TAG=$(echo ${{ github.sha }} | head -c8)
@@ -38,7 +43,7 @@ jobs:
           echo "AWS_REGION_NAME is $AWS_REGION_NAME"
           echo "IMAGE_NAME is $IMAGE_NAME"
           
-          docker build --build-arg EC2_USER=$EC2_USER -t $IMAGE_NAME .
+          docker build -t $IMAGE_NAME .
 
           echo "::set-output name=image::$IMAGE_NAME" 
         id: docker_build
