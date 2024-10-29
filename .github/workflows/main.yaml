@@ -92,8 +92,8 @@ jobs:
             
             echo "Using IMAGE_NAME: $IMAGE_NAME"
 
-            docker stop discoveryservice || true
-            docker rm discoveryservice || true
+            docker stop discovery_service_container || true
+            docker rm discovery_service_container || true
 
             sudo docker pull $IMAGE_NAME
 
