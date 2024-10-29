@@ -29,6 +29,7 @@ jobs:
         run: |
           touch .env
           echo "TEST_SECRET=${{ secrets.TEST_SECRET }}" >> .env
+          
 
       - name: Build Docker image
         run: |

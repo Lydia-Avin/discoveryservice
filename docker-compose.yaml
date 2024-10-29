@@ -7,8 +7,8 @@ version: '3'
 
 
 services:
-  discoveryservice:
-    container_name: discoveryservice
+  discovery_service_container:
+    container_name: discovery_service_container
     image: ${IMAGE_NAME}
     # env_file:
     #   - .env
