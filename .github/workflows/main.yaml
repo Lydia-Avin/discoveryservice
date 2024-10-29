@@ -43,7 +43,8 @@ jobs:
 
       - name: Push Docker image to ECR
         run: |
-          docker push ${{ steps.docker_build.outputs.image }}
+          # docker push ${{ steps.docker_build.outputs.image }}
+          docker push $IMAGE_NAME
 
   deploy-to-ec2:
     runs-on: ubuntu-latest
