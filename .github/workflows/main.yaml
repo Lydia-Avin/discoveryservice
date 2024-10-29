@@ -10,8 +10,6 @@ jobs:
   build-and-push-ecr:
     runs-on: ubuntu-latest
     name: Build and Push Docker Images to ECR
-    outputs:
-      image: ${{ steps.docker_build.outputs.image }}
 
     steps:
       - name: Checkout code
@@ -38,6 +36,7 @@ jobs:
           echo "Building Docker image: $IMAGE_NAME"
           docker build -t $IMAGE_NAME .
 
+          echo "::set-output name=image::$IMAGE_NAME" 
         id: docker_build
 
       - name: Push Docker image to ECR
