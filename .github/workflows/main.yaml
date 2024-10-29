@@ -3,7 +3,8 @@ name: CICD Pipeline
 on:
   push:
     branches:
-      - main
+      - testdev
+      - testprod
 
 jobs:
   build-and-push-ecr:
@@ -27,10 +28,20 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Create and set environment variables
+      # - name: Create and set environment variables
+      #   run: |
+      #     # Create .env file and add environment variables
+      #     echo "TEST_SECRET=${{ secrets.TEST_SECRET }}" > .env
+
+      - name: Set up environment file based on branch
         run: |
-          # Create .env file and add environment variables
-          echo "TEST_SECRET=${{ secrets.TEST_SECRET }}" > .env
+          if [ "${{ github.ref_name }}" == "testprod" ]; then
+            echo "ENV=production" > .env
+            echo "TEST_SECRET=${{ secrets.TEST_SECRET }}" >> .env
+          else
+            echo "ENV=development" > .env
+            echo "TEST_SECRET_NEW=${{ secrets.TEST_SECRET_NEW }}" >> .env
+          fi
 
       - name: Build Docker image
         run: |
