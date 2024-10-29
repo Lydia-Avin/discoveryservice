@@ -40,7 +40,7 @@ jobs:
             echo "TEST_SECRET=${{ secrets.TEST_SECRET }}" >> .env
           else
             echo "ENV=development" > .env
-            echo "TEST_SECRET_NEW=${{ secrets.TEST_SECRET_NEW }}" >> .env
+            echo "TEST_SECRET=${{ secrets.TEST_SECRET_NEW }}" >> .env
           fi
 
       - name: Build Docker image
