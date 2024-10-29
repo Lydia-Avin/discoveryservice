@@ -1,6 +1,5 @@
 name: CICD Pipeline
 
-# Trigger the workflow on push to the main branch
 on:
   push:
     branches:
@@ -10,18 +9,15 @@ jobs:
   build-and-push-ecr:
     runs-on: ubuntu-latest
     name: Build and Push Docker Images to ECR
-    #here we set the environment variables for the build process
     env:
       ENV: "DEV"
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     steps:
-      # Step 1: Check out the code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Configure AWS credentials (use secrets)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -29,36 +25,28 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION_NAME }}
 
-      # Step 3: Log in to Amazon ECR
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # Step 4: Build Docker image with dynamic tag 
       - name: Build Docker image
         run: |
-          # Define the dynamic tag (e.g., using the Git commit SHA)
           TAG=$(echo ${{ github.sha }} | head -c8)
           AWS_ACCOUNT_ID="${{ secrets.AWS_ACCOUNT_ID }}"
           AWS_REGION_NAME="${{ secrets.AWS_REGION_NAME }}"
           IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_NAME}.amazonaws.com/${{ secrets.ECR_REPOSITORY_NAME }}:${TAG}"
           
-          # Debugging: Print the IMAGE_NAME to ensure it's correctly formatted
           echo "AWS_ACCOUNT_ID is $AWS_ACCOUNT_ID"
           echo "AWS_REGION_NAME is $AWS_REGION_NAME"
           echo "IMAGE_NAME is $IMAGE_NAME"
           
-          # Build and tag the Docker image
           docker build --build-arg EC2_USER=$EC2_USER -t $IMAGE_NAME .
 
-          # Output the tag for later use
           echo "::set-output name=image::$IMAGE_NAME" 
         id: docker_build
 
-      # Step 5: Push Docker image to ECR
       - name: Push Docker image to ECR
         run: |
-          # Push the Docker image
           docker push ${{ steps.docker_build.outputs.image }}
 
   deploy-to-ec2:
@@ -67,7 +55,6 @@ jobs:
     needs: build-and-push-ecr
 
     steps:
-      # Step 1: SSH into EC2 and deploy containers using Docker Compose 
       - name: SSH into EC2 and deploy containers using Docker Compose
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -75,15 +62,12 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            #here we set the environment variables for the build process
             echo "ENV=DEV" > .env
             echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
             echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
             
-            # Stop any services that might be using port 80 (like Nginx or Apache)
             sudo systemctl stop nginx || echo "nginx not installed or running"
 
-            # Install Docker if not present
             if ! command -v docker &> /dev/null
             then
                 sudo yum update -y
@@ -92,29 +76,19 @@ jobs:
                 sudo systemctl enable docker
             fi
 
-            # Install Docker Compose if not present
             if ! command -v docker-compose &> /dev/null
             then
                 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
                 sudo chmod +x /usr/local/bin/docker-compose
             fi
 
-            # Configure AWS CLI on EC2 instance (optional if instance role already allows access) 
-            # Only uncomment the following lines if you need to configure AWS CLI manually
-            # aws configure set aws_access_key_id <your-access-key-id>
-            # aws configure set aws_secret_access_key <your-secret-access-key>
-            # aws configure set region <your-region>
-
-            # Docker login to ECR (specify the region for ECR )
             aws ecr get-login-password --region ${{ secrets.AWS_REGION_NAME }} | sudo docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com
 
-            # Clean up Docker to free space
             sudo docker container prune -f
             sudo docker image prune -a -f
             sudo docker volume prune -f
             sudo docker network prune -f
 
-            # Pull the Docker image from ECR 
             TAG=$(echo ${{ github.sha }} | head -c8)
             IMAGE_NAME=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION_NAME }}.amazonaws.com/${{ secrets.ECR_REPOSITORY_NAME }}:$TAG
             
@@ -127,11 +101,11 @@ jobs:
 
             export IMAGE_NAME=$IMAGE_NAME
 
-            # Run the docker-compose file root folder
             cd ./discoveryservice
+            env_file:
+              - .env 
             docker-compose down || true
-            # IMAGE_NAME=$IMAGE_NAME docker-compose up --pull always --force-recreate -d
-            IMAGE_NAME=$IMAGE_NAME docker-compose up -d --force-recreate --remove-orphans
+            IMAGE_NAME=$IMAGE_NAME docker-compose --env-file .env up -d --force-recreate --remove-orphans
 
             echo "Flask app container started successfully on port 8000"
             exit 0
