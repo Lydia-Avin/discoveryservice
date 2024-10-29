@@ -10,7 +10,7 @@ def create_app():
     
     @app.route("/env")
     def env():
-        print(os.environ.get("AWS_ACCESS_KEY_ID"))
-        return jsonify(message=os.environ.get("AWS_ACCESS_KEY_ID","Key not found"))
+        print(os.environ.get("TEST_SECRET"))
+        return jsonify(message=os.environ.get("TEST_SECRET","Key not found"))
 
     return app
