@@ -9,8 +9,8 @@ jobs:
   build-and-push-ecr:
     runs-on: ubuntu-latest
     name: Build and Push Docker Images to ECR
-    # env:
-    #   TEST_SECRET: ${{ secrets.TEST_SECRET }}
+    env:
+      TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
     steps:
       - name: Checkout code
