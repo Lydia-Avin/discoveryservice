@@ -11,7 +11,7 @@ def create_app():
     
     @app.route("/env")
     def env():
-        print(os.environ.get("TEST_SECRET"))
-        return jsonify(message=os.environ.get("TEST_SECRET","Key not found"))
+        print(os.getenv("TEST_SECRET"))
+        return jsonify(message=os.getenv("TEST_SECRET","Key not found"))
 
     return app
