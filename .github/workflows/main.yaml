@@ -9,8 +9,8 @@ jobs:
   build-and-push-ecr:
     runs-on: ubuntu-latest
     name: Build and Push Docker Images to ECR
-    env:
-      TEST_SECRET: ${{ secrets.TEST_SECRET }}
+    # env:
+    #   TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
     steps:
       - name: Checkout code
@@ -32,7 +32,6 @@ jobs:
           touch .env
           echo "TEST_SECRET=${{ secrets.TEST_SECRET }}" >> .env
           
-
       - name: Build Docker image
         run: |
           TAG=$(echo ${{ github.sha }} | head -c8)
@@ -66,7 +65,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            echo "TEST_SECRET=${{ secrets.TEST_SECRET }}" >> .env           
+            # echo "TEST_SECRET=${{ secrets.TEST_SECRET }}" >> .env           
             sudo systemctl stop nginx || echo "nginx not installed or running"
 
             if ! command -v docker &> /dev/null
