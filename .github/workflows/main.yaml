@@ -49,7 +49,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy and Run Docker Images on EC2
     needs: build-and-push-ecr
-    environment: ${{ github.ref_name == 'testprod' && 'production' || 'development' }}
 
     steps:
       - name: SSH into EC2 and deploy containers
