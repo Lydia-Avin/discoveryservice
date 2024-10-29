@@ -10,10 +10,6 @@ services:
   discovery_service_container:
     container_name: discovery_service_container
     image: ${IMAGE_NAME}
-    env_file:
-      - .env
-    environment:
-      - TEST_SECRET=${TEST_SECRET}
     ports:
       - "8000:8000"
 
