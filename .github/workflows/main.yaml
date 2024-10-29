@@ -102,10 +102,8 @@ jobs:
             export IMAGE_NAME=$IMAGE_NAME
 
             cd ./discoveryservice
-            env_file:
-              - .env 
             docker-compose down || true
-            IMAGE_NAME=$IMAGE_NAME docker-compose --env-file .env up -d --force-recreate --remove-orphans
+            IMAGE_NAME=$IMAGE_NAME docker-compose up -d --force-recreate --remove-orphans
 
             echo "Flask app container started successfully on port 8000"
             exit 0
