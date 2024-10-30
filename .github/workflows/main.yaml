@@ -104,7 +104,7 @@ jobs:
             # Deploy the new container using Docker Compose
             cd ./discoveryservice
             docker-compose down || true
-            IMAGE_NAME=$IMAGE_NAME docker-compose up -d --force-recreate --remove-orphans
+            IMAGE_NAME_DISCOVERY_SERVICE=$IMAGE_NAME docker-compose up -d --force-recreate --remove-orphans
 
             echo "Flask app container started successfully on port 8000"
             exit 0

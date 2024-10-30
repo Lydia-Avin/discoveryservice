@@ -12,7 +12,7 @@
 services:
   discovery_service_container:
     container_name: discovery_service_container
-    image: ${IMAGE_NAME}
+    image: ${IMAGE_NAME_DISCOVERY_SERVICE}
     ports:
       - '8000:8000'
     env_file:
