@@ -7,7 +7,7 @@ def create_app():
 
     @app.route("/")
     def root():
-        return jsonify(message="Welcome to Pepsales!!!")
+        return jsonify(message="Welcome to Pepsales")
     
     @app.route("/env")
     def env():
