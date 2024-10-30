@@ -12,5 +12,9 @@ def create_app():
     @app.route("/env")
     def env():
         return jsonify(message=os.getenv("TEST_SECRET","Key not found"))
+    
+    @app.route("/health")
+    def health():
+        return jsonify(message="OK")
 
     return app
