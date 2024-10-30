@@ -98,7 +98,15 @@ jobs:
             # Pull the new Docker image
             sudo docker pull $IMAGE_NAME
 
-            echo "export IMAGE_NAME_DISCOVERY_SERVICE_1=$IMAGE_NAME" >> ~/.bashrc
+            # echo "export IMAGE_NAME_DISCOVERY_SERVICE_1=$IMAGE_NAME" >> ~/.bashrc
+            {
+                sed -i.bak "s/^export IMAGE_NAME_DISCOVERY_SERVICE_1=.*/export IMAGE_NAME_DISCOVERY_SERVICE_1=\"$IMAGE_NAME\"/" ~/.bashrc
+                if ! grep -q "^export IMAGE_NAME_DISCOVERY_SERVICE_1=" ~/.bashrc; then
+                    echo "export IMAGE_NAME_DISCOVERY_SERVICE_1=\"$IMAGE_NAME\"" >> ~/.bashrc
+                fi
+            }
+
+            source ~/.bashrc  
 
             # Deploy the new container using Docker Compose
             cd ./discoveryservice
